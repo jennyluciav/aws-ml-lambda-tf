@@ -4,3 +4,11 @@ export LAMBDA_FUNCTION_NAME="my-lambda-model-function"
 export API_NAME="my-lambda-model-api"
 export IMAGE_NAME="my-lambda-model"
 export IMAGE_TAG="latest" 
+
+
+export REGISTRY_ID=$(aws ecr \
+  --profile lambda-model \
+  describe-repositories \
+  --query 'repositories[?repositoryName == `'$IMAGE_NAME'`].registryId' \
+  --output text)
+export IMAGE_URI=${REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}

@@ -1,0 +1,19 @@
+
+# Install docker
+sudo amazon-linux-extras install docker
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+
+# Make docker auto-start
+sudo chkconfig docker on
+
+# Install git
+sudo yum install -y git
+
+# Install terraform
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum -y install terraform
+terraform -help
+
+sudo reboot

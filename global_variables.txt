@@ -1,5 +1,5 @@
 export AWS_REGION=$(aws --profile lambda-model configure get region)
-export BUCKET_NAME="my-lambda-model-bucket-jlvg"
+export BUCKET_NAME="my-lambda-model-bucket-jv"
 export LAMBDA_FUNCTION_NAME="my-lambda-model-function"
 export API_NAME="my-lambda-model-api"
 export IMAGE_NAME="my-lambda-model"

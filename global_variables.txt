@@ -7,7 +7,6 @@ export IMAGE_TAG="latest"
 
 
 export REGISTRY_ID=$(aws ecr \
-  --profile lambda-model \
   describe-repositories \
   --query 'repositories[?repositoryName == `'$IMAGE_NAME'`].registryId' \
   --output text)

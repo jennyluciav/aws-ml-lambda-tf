@@ -21,6 +21,12 @@ sudo reboot
 # Terraform init
 terraform init
 
+# create s3 bucket and ECR repository
+(cd terraform &&  \
+  terraform apply \
+  -target=aws_ecr_repository.lambda_model_repository \
+  -target=aws_s3_bucket.lambda_model_bucket)
+  
 # ecr registry
 export REGISTRY_ID=$(aws ecr \
   describe-repositories \

@@ -8,7 +8,7 @@ locals {
   image_name           = "my-lambda-model"
   image_version        = "latest"
 
-  bucket_name          = "my-lambda-model-bucket"
+  bucket_name          = "my-lambda-model-bucket-jvg"
 
   lambda_function_name = "my-lambda-model-function"
 

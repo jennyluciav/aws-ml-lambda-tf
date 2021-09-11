@@ -18,16 +18,18 @@ terraform -help
 
 sudo reboot
 
+# Terraform init
+terraform init
+
 # ecr registry
 export REGISTRY_ID=$(aws ecr \
-  --profile lambda-model \
   describe-repositories \
   --query 'repositories[?repositoryName == `'$IMAGE_NAME'`].registryId' \
   --output text)
 export IMAGE_URI=${REGISTRY_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}
 
 # ecr login
-$(aws --profile lambda-model \
+$(aws \
   ecr get-login \
   --region $AWS_REGION \
   --registry-ids $REGISTRY_ID \
@@ -41,7 +43,6 @@ $(aws --profile lambda-model \
 # training the model
 docker run \
   -v ~/.aws:/root/.aws \
-  -e AWS_PROFILE=lambda-model \
   -e BUCKET_NAME=$BUCKET_NAME \
   --entrypoint=python \
   $IMAGE_URI:$IMAGE_TAG \
@@ -50,7 +51,6 @@ docker run \
 # testing
 docker run \
   -v ~/.aws:/root/.aws \
-  -e AWS_PROFILE=lambda-model \
   -e BUCKET_NAME=$BUCKET_NAME \
   --entrypoint=python \
   $IMAGE_URI:$IMAGE_TAG \
@@ -61,7 +61,7 @@ docker run \
 (cd terraform && terraform apply)
 
 # testing infra
-aws --profile lambda-model \
+aws \
   lambda \
   invoke \
   --function-name $LAMBDA_FUNCTION_NAME \
@@ -69,7 +69,6 @@ aws --profile lambda-model \
   response.json
 
 export ENDPOINT_ID=$(aws \
-  --profile lambda-model \
   apigateway \
   get-rest-apis \
   --query 'items[?name == `'$API_NAME'`].id' \
@@ -85,12 +84,12 @@ curl \
   $ENDPOINT_URL
 
 # update container
-aws --profile lambda-model \
+aws \
   lambda \
   update-function-code \
   --function-name $LAMBDA_FUNCTION_NAME \
   --image-uri $IMAGE_URI:$IMAGE_TAG
 
 # destroy
-aws s3 --profile lambda-model rm s3://${BUCKET_NAME}/model.pkl
+aws s3 rm s3://${BUCKET_NAME}/model.pkl
 (cd terraform && terraform destroy)

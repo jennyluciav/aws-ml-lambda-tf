@@ -1,7 +1,7 @@
-variable aws_profile {
-  type    = string
-  default = "lambda-model"
-}
+//variable aws_profile {
+//  type    = string
+//  default = "lambda-model"
+//}
 
 # constant settings
 locals {
